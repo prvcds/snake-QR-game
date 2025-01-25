@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body{margin:0;background:#f0f0f0;display:flex;justify-content:center;align-items:center;height:100vh}
+    canvas{border:1px solid #000}
+  </style>
+</head>
+<body style="background-color: #f0f4;">
+<canvas id="game" width="200" height="200"></canvas>
+<script>
+let s=[{x:60,y:60}],f={x:100,y:100},d=20,dx=d,dy=0,scr=0,c=document.getElementById("game").getContext("2d");
+function draw(){c.fillStyle="#fafafa";c.fillRect(0,0,200,200);c.fillStyle="red";c.fillRect(f.x,f.y,d,d);c.fillStyle="green";s.forEach(i=>c.fillRect(i.x,i.y,d,d))}
+function move(){let h={x:s[0].x+dx,y:s[0].y+dy};if(h.x<0||h.x>=200||h.y<0||h.y>=200||s.some(i=>i.x==h.x&&i.y==h.y))return end();s.unshift(h);h.x==f.x&&h.y==f.y?(scr++,placeFood()):s.pop()}
+function placeFood(){f={x:Math.floor(Math.random()*10)*d,y:Math.floor(Math.random()*10)*d};if(s.some(i=>i.x==f.x&&i.y==f.y))placeFood()}
+function end(){alert("Game Over! Score: "+scr);s=[{x:60,y:60}];dx=d;dy=0;scr=0;placeFood()}
+document.addEventListener("keydown",e=>{if(e.key=="ArrowUp"&&dy==0){dx=0;dy=-d}if(e.key=="ArrowDown"&&dy==0){dx=0;dy=d}if(e.key=="ArrowLeft"&&dx==0){dx=-d;dy=0}if(e.key=="ArrowRight"&&dx==0){dx=d;dy=0}})
+function loop(){move();draw();setTimeout(loop,200)}  <!-- Increased the timeout to slow down the game speed -->
+placeFood();loop();
+</script>
+</body>
+</html>
